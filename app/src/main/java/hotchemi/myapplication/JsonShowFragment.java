@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-
 public class JsonShowFragment extends Fragment {
 
     private static final String BUNDLE_KEY_URL = "url";
@@ -41,11 +40,6 @@ public class JsonShowFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_json_show, container, false);
@@ -59,20 +53,19 @@ public class JsonShowFragment extends Fragment {
         String url = getArguments().getString(BUNDLE_KEY_URL);
         RequestQueueHolder.getInstance(getActivity().getApplicationContext())
                 .addToRequestQueue(new StringRequest(
-                        (Request.Method.GET), url, new Response.Listener<String>() {
+                        Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONArray jArray = new JSONArray(response);
                             ArrayList<String> items = new ArrayList<>();
-                            for(int i=0; i < jArray.length() ; i++) {
+                            for (int i = 0; i < jArray.length(); i++) {
                                 JSONObject jsonObject = jArray.getJSONObject(i);
                                 String name = jsonObject.getString("name");
                                 items.add(name);
                             }
                             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_expandable_list_item_1, items);
                             listView.setAdapter(arrayAdapter);
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
